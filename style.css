@@ -1,0 +1,56 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 50px;
+
+  /* Background image */
+  background-image: url('assets/background.jpg'); /* 替换成你的图片路径 */
+  background-size: cover;       /* 图片覆盖整个页面 */
+  background-position: center;  /* 图片居中显示 */
+  background-repeat: no-repeat; /* 不重复 */
+  background-attachment: fixed; /* 滚动页面时背景固定 */
+
+  color: #fff; /* 可选：文字颜色改为白色，便于在背景上可读 */
+}
+
+/* Optional: add semi-transparent overlay for readability */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0,0,0,0.3); /* 透明黑色遮罩 */
+  z-index: -1;
+}
+
+.controls {
+  margin-bottom: 20px;
+}
+
+#timer {
+  font-size: 2em;
+  margin: 20px 0;
+}
+
+input, button {
+  padding: 10px;
+  font-size: 1em;
+}
+
+#image-container {
+  width: 300px;
+  height: 300px;
+  margin: 20px auto;
+  overflow: hidden;
+  border: 2px solid #333;
+  border-radius: 10px;
+  position: relative;
+}
+
+#image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
