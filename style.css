@@ -45,6 +45,10 @@ ul {
   padding: 0;
 }
 
+ul li {
+  margin: 20px 0;
+}
+
 /* ===== Time Inputs ===== */
 .time-inputs {
   margin-bottom: 20px;
@@ -218,6 +222,113 @@ button:hover {
   object-fit: cover;
   position: absolute;
   inset: 0;
+}
+
+.table-container {
+  max-height: 400px;
+  overflow-y: auto;
+  margin-top: 20px;
+}
+
+#addRowBtn {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #ff9800;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.2em;
+}
+
+#addRowBtn:hover {
+  background-color: #e68900;
+}
+.add-plan {
+  margin: 20px 0;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.add-plan input {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.add-plan button {
+  padding: 8px 16px;
+  background-color: #ff9800;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.add-plan button:hover {
+  background-color: #e68900;
+}
+
+#planTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#planTable th, #planTable td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#planTable th {
+  background-color: rgba(255, 152, 0, 0.8);
+  color: #fff;
+}
+
+#planTable td button {
+  background-color: #ff9800;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#planTable td button:hover {
+  background-color: #e68900;
+}
+
+.delete-btn {
+  background-color: #f44336;
+  margin-left: 10px;
+  padding: 2px 6px;
+  font-size: 0.8em;
+}
+
+.delete-btn:hover {
+  background-color: #d32f2f;
+}
+
+.completed {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.input-row {
+  background-color: rgba(255, 152, 0, 0.1);
+}
+
+.input-row input, .input-row select {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 5px;
 }
 
 /* Carrot message */

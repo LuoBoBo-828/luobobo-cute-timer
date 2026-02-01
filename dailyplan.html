@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Specific Daily Plan</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Specific Daily Plan</h1>
+  <p><a href="index.html">Back to Main Page</a></p>
+
+  <div class="table-container">
+  <table id="planTable">
+    <thead>
+      <tr>
+        <th>Number</th>
+        <th>Done</th>
+        <th>Task</th>
+        <th>Detail</th>
+        <th>Time</th>
+      </tr>
+    </thead>
+    <tbody id="planBody">
+    </tbody>
+  </table>
+  <button id="addRowBtn">+</button>
+  </div>
+
+  <script>
+    let dailyPlan = JSON.parse(localStorage.getItem('dailyPlan')) || [];
+
+    function renderPlan() {
+      const tbody = document.getElementById('planBody');
+      tbody.innerHTML = '';
+
+      // Sort: items with time first, sorted by startTime, then without time
+      const withTime = dailyPlan.filter(item => item.startTime).sort((a, b) => a.startTime.localeCompare(b.startTime));
+      const withoutTime = dailyPlan.filter(item => !item.startTime);
+      const sortedPlan = [...withTime, ...withoutTime];
+
+      sortedPlan.forEach((item, index) => {
+        const tr = document.createElement('tr');
+        if (item.completed) tr.classList.add('completed');
+
+        const tdNum = document.createElement('td');
+        tdNum.textContent = index + 1;
+        tr.appendChild(tdNum);
+
+        const tdDone = document.createElement('td');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = item.completed;
+        checkbox.addEventListener('change', () => {
+          item.completed = checkbox.checked;
+          tr.classList.toggle('completed');
+          savePlan();
+        });
+        tdDone.appendChild(checkbox);
+        tr.appendChild(tdDone);
+
+        const tdTask = document.createElement('td');
+        const taskInput = document.createElement('input');
+        taskInput.type = 'text';
+        taskInput.value = item.task;
+        taskInput.addEventListener('input', () => {
+          item.task = taskInput.value;
+          savePlan();
+        });
+        tdTask.appendChild(taskInput);
+        tr.appendChild(tdTask);
+
+        const tdDetail = document.createElement('td');
+        const detailInput = document.createElement('input');
+        detailInput.type = 'text';
+        detailInput.value = item.detail;
+        detailInput.addEventListener('input', () => {
+          item.detail = detailInput.value;
+          savePlan();
+        });
+        tdDetail.appendChild(detailInput);
+        tr.appendChild(tdDetail);
+
+        const tdTime = document.createElement('td');
+        const startTimeInput = document.createElement('input');
+        startTimeInput.type = 'time';
+        startTimeInput.value = item.startTime || '';
+        startTimeInput.addEventListener('input', () => {
+          item.startTime = startTimeInput.value;
+          savePlan();
+          renderPlan(); // to re-sort
+        });
+        const endTimeInput = document.createElement('input');
+        endTimeInput.type = 'time';
+        endTimeInput.value = item.endTime || '';
+        endTimeInput.addEventListener('input', () => {
+          item.endTime = endTimeInput.value;
+          savePlan();
+          renderPlan(); // to re-sort
+        });
+        tdTime.appendChild(startTimeInput);
+        tdTime.appendChild(document.createTextNode(' - '));
+        tdTime.appendChild(endTimeInput);
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = '×';
+        deleteBtn.classList.add('delete-btn');
+        deleteBtn.addEventListener('click', () => {
+          dailyPlan.splice(dailyPlan.indexOf(item), 1);
+          savePlan();
+          renderPlan();
+        });
+        tdTime.appendChild(deleteBtn);
+
+        tr.appendChild(tdTime);
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function savePlan() {
+      localStorage.setItem('dailyPlan', JSON.stringify(dailyPlan));
+    }
+
+    document.getElementById('addRowBtn').addEventListener('click', () => {
+      dailyPlan.push({task:'', detail:'', startTime:'', endTime:'', completed:false});
+      renderPlan();
+    });
+
+    renderPlan();
+  </script>
+</body>
+</html>
