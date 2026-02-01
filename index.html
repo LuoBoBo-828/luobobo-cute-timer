@@ -3,57 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quick Image Countdown</title>
+  <title>Learning App Main Page</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Countdown Reminder</h1>
-
-  <div id="carrots">Carrots: 0</div>
-
-  <div class="time-inputs">
-    <label>Minutes:</label>
-    <input type="number" id="minutesInput" min="0" value="0">
-
-    <label>Seconds:</label>
-    <input type="number" id="secondsInput" min="0" max="59" value="10">
-  </div>
-
-  <div class="controls">
-    <label>Background Audio:</label>
-    <select id="audioSelect">
-      <option value="">None</option>
-      <option value="assets/rain.mp3">Rain Sounds</option>
-    </select>
-
-    <button id="startBtn">Start Countdown</button>
-    <button id="pauseBtn">Pause</button>
-    <button id="continueBtn">Continue</button>
-    <button id="stopBtn">Stop Alarm</button>
-  </div>
-
-  <div id="timer">00:00</div>
-
-  <div class="content-wrapper">
-    <div id="main-content">
-      <div id="image-container">
-        <img src="assets/image1.jpg" id="img1" alt="Image 1">
-        <img src="assets/image2.jpg" id="img2" alt="Image 2">
-      </div>
-
-      <div id="carrot-message">Every 60 minutes, you get a carrot! 🥕</div>
-    </div>
-
-    <div id="todo-section">
-      <h2>To-Do List</h2>
-      <input type="text" id="todo-input" placeholder="Add a task...">
-      <ul id="todo-list"></ul>
-    </div>
-  </div>
-
-  <audio id="alarm" src="assets/alarm.mp3"></audio>
-  <audio id="bgAudio" loop></audio>
-
-  <script src="index.js"></script>
+  <h1>Welcome to the Learning App</h1>
+  <p>Choose an option below:</p>
+  <ul>
+    <li><a href="countdown.html" class="main-link">Start Countdown Timer with To-Do List</a></li>
+  </ul>
 </body>
 </html>

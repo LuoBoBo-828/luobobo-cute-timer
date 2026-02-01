@@ -24,6 +24,27 @@ body::before {
   z-index: -1;
 }
 
+/* ===== Main Link Button ===== */
+.main-link {
+  display: inline-block;
+  padding: 15px 30px;
+  font-size: 1.2em;
+  background-color: #ff9800;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.main-link:hover {
+  background-color: #e68900;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
 /* ===== Time Inputs ===== */
 .time-inputs {
   margin-bottom: 20px;
