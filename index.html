@@ -11,12 +11,20 @@
 
   <div id="carrots">Carrots: 0</div>
 
-  <div class="controls">
+  <div class="time-inputs">
     <label>Minutes:</label>
     <input type="number" id="minutesInput" min="0" value="0">
 
     <label>Seconds:</label>
     <input type="number" id="secondsInput" min="0" max="59" value="10">
+  </div>
+
+  <div class="controls">
+    <label>Background Audio:</label>
+    <select id="audioSelect">
+      <option value="">None</option>
+      <option value="assets/rain.mp3">Rain Sounds</option>
+    </select>
 
     <button id="startBtn">Start Countdown</button>
     <button id="pauseBtn">Pause</button>
@@ -44,6 +52,7 @@
   </div>
 
   <audio id="alarm" src="assets/alarm.mp3"></audio>
+  <audio id="bgAudio" loop></audio>
 
   <script src="index.js"></script>
 </body>

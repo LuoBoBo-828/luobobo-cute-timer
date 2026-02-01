@@ -24,8 +24,8 @@ body::before {
   z-index: -1;
 }
 
-/* ===== Controls Section ===== */
-.controls {
+/* ===== Time Inputs ===== */
+.time-inputs {
   margin-bottom: 20px;
   display: flex;
   justify-content: center;
@@ -35,7 +35,8 @@ body::before {
 
 /* Input fields and buttons */
 input,
-button {
+button,
+select {
   padding: 10px 14px;
   font-size: 1em;
   border-radius: 6px;
@@ -46,6 +47,10 @@ button {
 input {
   width: 80px;
   text-align: center;
+}
+
+select {
+  width: 120px;
 }
 
 /* Button styling */
@@ -133,7 +138,7 @@ button:hover {
 #todo-list li {
   display: flex;
   align-items: center;
-  padding: 8px 0;
+  padding: 8px 10px 8px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 

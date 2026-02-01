@@ -9,6 +9,8 @@ const stopBtn = document.getElementById('stopBtn');
 const carrotsDisplay = document.getElementById('carrots');
 const todoInput = document.getElementById('todo-input');
 const todoListEl = document.getElementById('todo-list');
+const bgAudio = document.getElementById('bgAudio');
+const audioSelect = document.getElementById('audioSelect');
 
 const minutesInput = document.getElementById('minutesInput');
 const secondsInput = document.getElementById('secondsInput');
@@ -21,15 +23,8 @@ let isPaused = false;
 let initialCountdown;
 
 // Load or initialize data
-const today = new Date().toDateString();
-const storedDate = localStorage.getItem('lastDate');
-if (storedDate !== today) {
-  localStorage.setItem('carrots', 0);
-  localStorage.setItem('totalMinutes', 0);
-  localStorage.setItem('lastDate', today);
-}
-let carrots = parseInt(localStorage.getItem('carrots')) || 0;
-let totalMinutes = parseInt(localStorage.getItem('totalMinutes')) || 0;
+let carrots = 0;
+let totalMinutes = 0;
 let todoList = JSON.parse(localStorage.getItem('todoList')) || [];
 
 // Update carrots display
@@ -94,6 +89,7 @@ alarm.loop = true;
 
 // Function to start countdown and image switching
 function startCountdown() {
+  lastAnnouncedMinutes = -1; // Reset for new session
   // Quick image switching every 100ms
   imageInterval = setInterval(() => {
     showFirst = !showFirst;
@@ -110,13 +106,13 @@ function startCountdown() {
       clearInterval(interval);
       clearInterval(imageInterval);
 
+      // Stop background audio
+      bgAudio.pause();
+      bgAudio.currentTime = 0;
+
       // Add session time to total
       totalMinutes += Math.floor(initialCountdown / 60);
       carrots = Math.floor(totalMinutes / 60);
-
-      // Save to localStorage
-      localStorage.setItem('totalMinutes', totalMinutes);
-      localStorage.setItem('carrots', carrots);
 
       // Update display
       updateCarrotsDisplay();
@@ -161,6 +157,12 @@ startBtn.addEventListener('click', () => {
   img1.style.display = 'block';
   img2.style.display = 'none';
 
+  // Start background audio if selected
+  if (audioSelect.value) {
+    bgAudio.src = audioSelect.value;
+    bgAudio.play();
+  }
+
   startCountdown();
 });
 
@@ -169,6 +171,7 @@ pauseBtn.addEventListener('click', () => {
   if (!isPaused) {
     clearInterval(interval);
     clearInterval(imageInterval);
+    bgAudio.pause();
     isPaused = true;
   }
 });
@@ -177,6 +180,9 @@ pauseBtn.addEventListener('click', () => {
 continueBtn.addEventListener('click', () => {
   if (isPaused && countdown > 0) {
     isPaused = false;
+    if (audioSelect.value) {
+      bgAudio.play();
+    }
     startCountdown();
   }
 });
