@@ -2,7 +2,7 @@
 
 A web-based learning application with a countdown timer, rewards system, and to-do list.
 
-## Features
+# Features
 - **Main Page:** Entry point with navigation to different sections.
 - **Countdown Timer with To-Do List:** Focused learning sessions with image animations, pause/resume, alarm, background audio, carrot rewards, and task management.
 - **Specific Daily Plan:** Detailed daily scheduling with tasks, details, and time slots, sorted by time.
