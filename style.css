@@ -340,3 +340,27 @@ button:hover {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
   margin: 10px 0;
 }
+
+/* Audio controls */
+#audioPlayBtn {
+  margin-left: 8px;
+  background-color: #009688;
+}
+
+#audioProgress {
+  width: 220px;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+#currentTrack {
+  margin-left: 8px;
+  font-size: 0.95em;
+  color: #fff;
+  display: inline-block;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}

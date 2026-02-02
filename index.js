@@ -11,6 +11,9 @@ const todoInput = document.getElementById('todo-input');
 const todoListEl = document.getElementById('todo-list');
 const bgAudio = document.getElementById('bgAudio');
 const audioSelect = document.getElementById('audioSelect');
+const audioPlayBtn = document.getElementById('audioPlayBtn');
+const audioProgress = document.getElementById('audioProgress');
+const currentTrack = document.getElementById('currentTrack');
 
 const minutesInput = document.getElementById('minutesInput');
 const secondsInput = document.getElementById('secondsInput');
@@ -106,9 +109,8 @@ function startCountdown() {
       clearInterval(interval);
       clearInterval(imageInterval);
 
-      // Stop background audio
-      bgAudio.pause();
-      bgAudio.currentTime = 0;
+      // Fade out background audio smoothly
+      fadeOutAudio(bgAudio, 3000);
 
       // Add session time to total
       totalMinutes += Math.floor(initialCountdown / 60);
@@ -160,7 +162,10 @@ startBtn.addEventListener('click', () => {
   // Start background audio if selected
   if (audioSelect.value) {
     bgAudio.src = audioSelect.value;
-    bgAudio.play();
+    bgAudio.play().catch(()=>{});
+    isAudioPlaying = true;
+    audioPlayBtn.textContent = 'Pause';
+    updateCurrentTrack();
   }
 
   startCountdown();
@@ -171,8 +176,11 @@ pauseBtn.addEventListener('click', () => {
   if (!isPaused) {
     clearInterval(interval);
     clearInterval(imageInterval);
+    cancelFade();
     bgAudio.pause();
     isPaused = true;
+    isAudioPlaying = false;
+    audioPlayBtn.textContent = 'Play';
   }
 });
 
@@ -181,7 +189,10 @@ continueBtn.addEventListener('click', () => {
   if (isPaused && countdown > 0) {
     isPaused = false;
     if (audioSelect.value) {
-      bgAudio.play();
+      cancelFade();
+      bgAudio.play().catch(()=>{});
+      isAudioPlaying = true;
+      audioPlayBtn.textContent = 'Pause';
     }
     startCountdown();
   }
@@ -205,3 +216,127 @@ function updateTimerDisplay() {
 
   timerDisplay.textContent = `${minutes}:${seconds}`;
 }
+
+// ===== Audio control state & helpers =====
+let isAudioPlaying = false;
+let userSeeking = false;
+let fadeInterval = null;
+let fadeTimeout = null;
+let originalVolume = bgAudio.volume || 1;
+
+function updateCurrentTrack() {
+  const val = audioSelect.value;
+  if (!val) currentTrack.textContent = 'No track';
+  else {
+    const text = audioSelect.options[audioSelect.selectedIndex].text;
+    currentTrack.textContent = text;
+  }
+}
+updateCurrentTrack();
+
+// Switch tracks during playback and keep playing if it was playing
+audioSelect.addEventListener('change', () => {
+  const wasPlaying = !bgAudio.paused && !bgAudio.ended;
+  if (audioSelect.value) {
+    cancelFade();
+    bgAudio.src = audioSelect.value;
+    updateCurrentTrack();
+    if (wasPlaying || isAudioPlaying) {
+      bgAudio.play().catch(()=>{});
+      isAudioPlaying = true;
+      audioPlayBtn.textContent = 'Pause';
+    } else {
+      bgAudio.currentTime = 0;
+    }
+  } else {
+    cancelFade();
+    bgAudio.pause();
+    bgAudio.currentTime = 0;
+    isAudioPlaying = false;
+    audioPlayBtn.textContent = 'Play';
+    updateCurrentTrack();
+  }
+});
+
+// Play/pause control for background music
+audioPlayBtn.addEventListener('click', () => {
+  if (bgAudio.paused) {
+    bgAudio.play().catch(()=>{});
+    isAudioPlaying = true;
+    audioPlayBtn.textContent = 'Pause';
+  } else {
+    cancelFade();
+    bgAudio.pause();
+    isAudioPlaying = false;
+    audioPlayBtn.textContent = 'Play';
+  }
+});
+
+// Progress bar updates and seeking
+bgAudio.addEventListener('timeupdate', () => {
+  if (!userSeeking && bgAudio.duration) {
+    audioProgress.value = (bgAudio.currentTime / bgAudio.duration) * 100;
+  }
+});
+bgAudio.addEventListener('loadedmetadata', () => {
+  if (bgAudio.duration) {
+    audioProgress.value = 0;
+  }
+});
+
+audioProgress.addEventListener('input', () => {
+  if (!bgAudio.duration) return;
+  userSeeking = true;
+  const seekTime = (audioProgress.value / 100) * bgAudio.duration;
+  bgAudio.currentTime = seekTime;
+});
+
+audioProgress.addEventListener('change', () => {
+  userSeeking = false;
+});
+
+// Keep UI synced with audio play/pause
+bgAudio.addEventListener('play', () => {
+  isAudioPlaying = true;
+  audioPlayBtn.textContent = 'Pause';
+});
+bgAudio.addEventListener('pause', () => {
+  isAudioPlaying = false;
+  audioPlayBtn.textContent = 'Play';
+});
+
+// Fade-out helpers
+function cancelFade() {
+  if (fadeInterval) {
+    clearInterval(fadeInterval);
+    fadeInterval = null;
+  }
+  if (fadeTimeout) {
+    clearTimeout(fadeTimeout);
+    fadeTimeout = null;
+  }
+  bgAudio.volume = originalVolume;
+}
+
+function fadeOutAudio(audio, duration = 3000) {
+  cancelFade();
+  originalVolume = audio.volume || 1;
+  const steps = 30;
+  const stepTime = duration / steps;
+  let step = 0;
+  fadeInterval = setInterval(() => {
+    step++;
+    const newVol = Math.max(0, originalVolume * (1 - step / steps));
+    audio.volume = newVol;
+    if (step >= steps) {
+      clearInterval(fadeInterval);
+      fadeInterval = null;
+      audio.pause();
+      audio.currentTime = 0;
+      audio.volume = originalVolume;
+    }
+  }, stepTime);
+}
+
+// Replace instantaneous audio stop with a fade when countdown finishes
+// (Handled inside startCountdown's end logic by calling fadeOutAudio(bgAudio, 3000))

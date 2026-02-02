@@ -8,13 +8,10 @@
 </head>
 <body>
   <h1>Countdown Reminder</h1>
-
   <div id="carrots">Carrots: 0</div>
-
   <div class="time-inputs">
     <label>Minutes:</label>
     <input type="number" id="minutesInput" min="0" value="0">
-
     <label>Seconds:</label>
     <input type="number" id="secondsInput" min="0" max="59" value="10">
   </div>
@@ -24,7 +21,14 @@
     <select id="audioSelect">
       <option value="">None</option>
       <option value="assets/rain.mp3">Rain Sounds</option>
+      <optgroup label="R&amp;B">
+        <option value="./R&B/rnb1.mp3">R&B - rnb1</option>
+      </optgroup>
     </select>
+
+    <button id="audioPlayBtn">Play</button>
+    <span id="currentTrack">No track</span>
+    <input type="range" id="audioProgress" min="0" max="100" value="0" step="0.1">
 
     <button id="startBtn">Start Countdown</button>
     <button id="pauseBtn">Pause</button>
@@ -40,7 +44,6 @@
         <img src="assets/image1.jpg" id="img1" alt="Image 1">
         <img src="assets/image2.jpg" id="img2" alt="Image 2">
       </div>
-
       <div id="carrot-message">Every 60 minutes, you get a carrot! 🥕</div>
     </div>
 
